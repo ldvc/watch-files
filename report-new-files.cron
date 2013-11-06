@@ -1,0 +1,3 @@
+BAKDATE=`date +%Y%m%d`
+SERVER=`hostname -f`
+40 0 * * * root bash /usr/local/bin/summarize.sh 2>&1
