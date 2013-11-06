@@ -1,0 +1,69 @@
+#!/bin/sh -e
+#
+### BEGIN INIT INFO
+# Provides: watch-files
+# Required-Start: $network $syslog
+# Required-Stop: $network
+# Default-Start: 2 3 5
+# Default-Stop: 0 1 6
+# Description: Start / Restart watch-files
+### END INIT INFO
+
+NAME=watch-file
+SCRIPTNAME=/etc/init.d/$NAME
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+# path du fichier temporaire
+TMP=/tmp/rtorrent.dtach
+# user qui lance le torrent
+USER=$nom
+# default dir to watch in
+DEFAULT_DIR="/tmp"
+
+start() {
+	if [ "$(pgrep -c "watch-files.sh")" != 0  ]; then
+		echo "$NAME already started. Cancelling..."
+	fi
+    echo -n "Starting $NAME: "
+	watch-files.sh $DEFAULT_DIR
+	#if [ $? -ne 0 ] ; then 
+	#	echo "Something wrong happened... Aborted."
+	#else
+    #	echo "started on "
+	#fi
+}
+
+stop() {
+    echo -n "Stopping $NAME: "
+    #killall -r "watch-files"
+	# better ?
+	pkill inotifywait
+    echo "stopped"
+}
+
+restart() {
+
+    if [ "$(pgrep -c "watch-files")" != 0  ]; then
+    {
+            stop
+            sleep 5
+    }
+    fi
+    start
+}
+
+
+case $1 in
+    start)
+           start
+    ;;
+    stop)
+            stop
+    ;;
+    restart)
+            restart
+    ;;
+    *)
+            echo "Usage:  {start|stop|restart}" >&2
+            exit 2
+    ;;
+esac
