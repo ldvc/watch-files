@@ -16,4 +16,9 @@ Installation
 > 
 > sudo ln -s /home/jdoe/watch-files/*.cron /etc/cron.d
 >
-> sudo ln -s /home/jdoe/watch-files/*.init /etc/init.d
+> sudo ln -s /home/jdoe/watch-files/watch-files.init /etc/init.d
+
+Customization
+------------
+
+Please modify `DIR_TO_WATCH` and `LOG_RUN` in the watch-files.conf file in order to suit your needs.
