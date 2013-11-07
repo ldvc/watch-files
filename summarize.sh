@@ -16,10 +16,10 @@ LOG_DIR="/var/log/watch-files"
 DIR_TO_WATCH=`awk '{ if ($1 == "DIR_TO_WATCH") print $3 }' $CONF_FILE`
 LOG_NEW_FILES="$LOG_DIR/new-files.log"
 LOG_RUN=`awk '{ if ($1 == "LOG_RUN") print $3 }' $CONF_FILE`
-FILTER=`awk '{ if ($1 == "EXTENSION_INCLUDE") print $3 }' *.conf`
+FILTER=`awk '{ if ($1 == "EXTENSION_INCLUDE") print $3 }' $CONF_FILE`
 
 SUBJECT="Latest created files in $DIR_TO_WATCH"
-EMAIL=`awk '{ if ($1 == "EMAIL") print $3 }' *.conf`
+EMAIL=`awk '{ if ($1 == "EMAIL") print $3 }' $CONF_FILE`
 MESSAGE=`tempfile`
 
 egrep -Ri "^CLOSE_WRITE,CLOSE.*($FILTER)$" $LOG_RUN | cut -d '|' -f 2 > $MESSAGE
