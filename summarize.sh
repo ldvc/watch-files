@@ -16,12 +16,13 @@ LOG_DIR="/var/log/watch-files"
 DIR_TO_WATCH=`awk '{ if ($1 == "DIR_TO_WATCH") print $3 }' $CONF_FILE`
 LOG_NEW_FILES="$LOG_DIR/new-files.log"
 LOG_RUN=`awk '{ if ($1 == "LOG_RUN") print $3 }' $CONF_FILE`
+FILTER=`awk '{ if ($1 == "EXTENSION_INCLUDE") print $3 }' *.conf`
 
 SUBJECT="Latest created files in $DIR_TO_WATCH"
 EMAIL="user@example.com"
 MESSAGE=`tempfile`
 
-egrep -Ri "^CLOSE_WRITE,CLOSE.*(mkv|avi)$" $LOG_RUN | cut -d '|' -f 2 > $MESSAGE
+egrep -Ri "^CLOSE_WRITE,CLOSE.*($FILTER)$" $LOG_RUN | cut -d '|' -f 2 > $MESSAGE
 
 /usr/bin/mail -s "$SUBJECT" "$EMAIL" < $MESSAGE
 
