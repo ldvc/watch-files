@@ -6,7 +6,7 @@ Brief script to keep track of created files in specified directory.
 Installation
 ------------
 
-Before starting, make sure that package **iinotify-tools** is installed.
+Before starting, make sure that package **inotify-tools** is installed.
 
 1. First, clone the project in your favorite folder (assuming git is already installed) :
 > cd /home/jdoe/ && git clone https://github.com/ldvc/watch-files
