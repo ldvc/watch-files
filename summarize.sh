@@ -19,7 +19,7 @@ LOG_RUN=`awk '{ if ($1 == "LOG_RUN") print $3 }' $CONF_FILE`
 FILTER=`awk '{ if ($1 == "EXTENSION_INCLUDE") print $3 }' *.conf`
 
 SUBJECT="Latest created files in $DIR_TO_WATCH"
-EMAIL="user@example.com"
+EMAIL=`awk '{ if ($1 == "EMAIL") print $3 }' *.conf`
 MESSAGE=`tempfile`
 
 egrep -Ri "^CLOSE_WRITE,CLOSE.*($FILTER)$" $LOG_RUN | cut -d '|' -f 2 > $MESSAGE
