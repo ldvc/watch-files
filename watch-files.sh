@@ -14,10 +14,6 @@
 ###  sudo aptitude install inotify-tools
 
 self=$(hostname)
-CONF_FILE="/etc/watch-files.conf"
-LOG_DIR="/var/log/watch-files"
-LOG_NEW_FILES="$LOG_DIR/new-files.log"
-LOG_RUN=`awk '{ if ($1 == "LOG_RUN") print $3 }' $CONF_FILE`
 
 # find a better way to manage it
 if [ "$UID" -ne 0 ] ; then
@@ -30,6 +26,19 @@ if [ ! -x /usr/bin/inotifywait ] ; then
 	echo "Please install inotify-tools in order to execute"
 	exit 2
 fi
+
+[[ `nc -z localhost smtp` ]] || echo "[WARN] No SMTP service available, please note that that mail report won't work."
+
+# init some vars
+CONF_FILE="/etc/watch-files.conf"
+if [ ! -f $CONF_FILE ] ; then 
+	echo "Config file $CONF_FILE not found, aborting."
+	exit 3
+fi
+
+LOG_DIR="/var/log/watch-files"
+LOG_NEW_FILES="$LOG_DIR/new-files.log"
+
 
 # create running log if not exists
 if [ ! -f $LOG_RUN ] || [ ! -f $LOG_NEW_FILES ] ; then
@@ -50,14 +59,12 @@ else
 	if [ $# -ne 1 ] ; then
 		echo -e "Please specify directory to monitor!"
 		echo "usage: $0 [DIR TO WATCH]"
-		exit 3
+		exit 4
 	else 
 		DIR_TO_WATCH=${1}
 		echo "Starting watching files in $DIR_TO_WATCH"
 	fi
 fi
-
-# need one arg : dir to watch
 
 # start watching
 inotifywait -q -d -o $LOG_RUN -r --exclude ".*CVS.*" \
